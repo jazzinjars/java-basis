@@ -20,8 +20,4 @@ public class EmployeeRepository {
 		}
 		return null;
 	}
-
-	public Employee getEmployee() {
-		return new Employee(0, "a", 0.);
-	}
 }
