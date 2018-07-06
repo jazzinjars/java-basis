@@ -1,6 +1,7 @@
 package com.jazzinjars.basis.streams;
 
 import com.jazzinjars.basis.streams.model.Employee;
+import com.jazzinjars.basis.streams.repository.EmployeeRepository;
 import org.junit.jupiter.api.BeforeAll;
 
 import java.util.Arrays;
@@ -10,6 +11,7 @@ public class GenericStreamsTest {
 
 	static Employee[] arrayOfEmployees;
 	static List<Employee> listOfEmployees;
+	static EmployeeRepository employeeRepository;
 
 	@BeforeAll
 	public static void initializeDataStructures() {
@@ -19,5 +21,7 @@ public class GenericStreamsTest {
 				new Employee(2, "Cersei Lannister", 300000.0)
 		};
 		listOfEmployees = Arrays.asList(arrayOfEmployees);
+
+		employeeRepository = new EmployeeRepository(listOfEmployees);
 	}
 }

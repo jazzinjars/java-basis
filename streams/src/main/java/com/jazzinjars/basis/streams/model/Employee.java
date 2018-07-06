@@ -14,4 +14,9 @@ public class Employee {
 		this.name = name;
 		this.salary = salary;
 	}
+
+	public double salaryIncrement(double percentage) {
+		this.salary += salary * percentage / 100;
+		return this.salary;
+	}
 }
