@@ -18,7 +18,7 @@ public class GenericStreamsTest {
 		arrayOfEmployees = new Employee[] {
 				new Employee(1, "Arya Stark", 150000.0),
 				new Employee(2, "John Snow", 200000.0),
-				new Employee(2, "Cersei Lannister", 300000.0)
+				new Employee(3, "Cersei Lannister", 300000.0)
 		};
 		listOfEmployees = Arrays.asList(arrayOfEmployees);
 
