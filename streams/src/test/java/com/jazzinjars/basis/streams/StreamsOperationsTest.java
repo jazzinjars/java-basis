@@ -42,7 +42,7 @@ public class StreamsOperationsTest extends GenericStreamsTest {
     }
 
     @Test
-    @DisplayName("collect(): performs mutable fold operations on data elements held in the Stream Instance")
+    @DisplayName("collect(): performs mutable fold operations on data elements held in the Stream Instance to get data out of the Stream")
     public void whenCollectStreamToList_thenGetList() {
         List<Employee> employees = listOfEmployees.stream().collect(Collectors.toList());
 
@@ -61,6 +61,29 @@ public class StreamsOperationsTest extends GenericStreamsTest {
                 .collect(Collectors.toList());
 
         Assertions.assertEquals(Arrays.asList(arrayOfEmployees[2]), employees);
+    }
+
+    @Test
+    @DisplayName("findFirst(): returns an Optional for the first entry in the Stream")
+    public void whenFindFirst_thenGetFirstEmployeeInStream() {
+        Integer[] employeeIDs = {1, 2, 3, 4};
+
+        Employee employee = Stream.of(employeeIDs)
+                .map(employeeRepository::findById)
+                .filter(e -> e != null)
+                .filter(e -> e.getSalary() > 100000)
+                .findFirst()
+                .orElse(null);
+
+        Assertions.assertEquals(employee.getSalary(), new Double(150000));
+    }
+
+    @Test
+    @DisplayName("toArray(): to get an Array out of the Stream")
+    public void whenStreamToArray_thenGetArray() {
+        Employee[] employees = listOfEmployees.stream().toArray(Employee[]::new);
+
+        assertThat(listOfEmployees.toArray(), equalTo(employees));
     }
 
 }
