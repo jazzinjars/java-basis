@@ -4,6 +4,8 @@ import com.jazzinjars.basis.streams.model.Employee;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.NoSuchElementException;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class StreamsCreationTest extends GenericStreamsTest {
@@ -27,6 +29,23 @@ public class StreamsCreationTest extends GenericStreamsTest {
         Stream<Employee> expected = employeeBuilder.build();
 
         Assertions.assertNotEquals(expected, actual);
+    }
+
+    @Test
+    public void whenFindMaxOnIntStream_thenGetMaxInteger() {
+        Integer latestEmpId = listOfEmployees.stream()
+                .mapToInt(Employee::getId)
+                .max()
+                .orElseThrow(NoSuchElementException::new);
+
+        Assertions.assertEquals(latestEmpId, new Integer(3));
+
+        //OR
+        IntStream.of(1, 2, 3);
+        IntStream.range(10, 20);
+
+        //This return Stream<Integer> and NOT IntStream
+        Stream.of(1, 2, 3);
     }
 
 }

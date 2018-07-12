@@ -11,7 +11,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -42,7 +44,7 @@ public class StreamsOperationsTest extends GenericStreamsTest {
     }
 
     @Test
-    @DisplayName("collect(): performs mutable fold operations on data elements held in the Stream Instance to get data out of the Stream")
+    @DisplayName("collect() [TerminalOperation]: performs mutable fold operations on data elements held in the Stream Instance to get data out of the Stream")
     public void whenCollectStreamToList_thenGetList() {
         List<Employee> employees = listOfEmployees.stream().collect(Collectors.toList());
 
@@ -50,7 +52,7 @@ public class StreamsOperationsTest extends GenericStreamsTest {
     }
 
     @Test
-    @DisplayName("filter(): produces a new Stream that contains elements of the original that pass a given test/predicate")
+    @DisplayName("filter() [IntermediateOperation]: produces a new Stream that contains elements of the original that pass a given test/predicate")
     public void whenFilterEmployees_thenGetFilteredStream() {
         Integer[] employeeIDs = {1, 2, 3, 4};
 
@@ -84,6 +86,46 @@ public class StreamsOperationsTest extends GenericStreamsTest {
         Employee[] employees = listOfEmployees.stream().toArray(Employee[]::new);
 
         assertThat(listOfEmployees.toArray(), equalTo(employees));
+    }
+
+    @Test
+    @DisplayName("flatMap(): to flatten complex data structure in a Stram (ex. Stream<List<String>>)")
+    public void whenFlatMapEmployeesNames_thenGetNameStream() {
+        List<List<String>> namesNested = Arrays.asList(
+                Arrays.asList("Arya", "Stark"),
+                Arrays.asList("Robb", "Stark"),
+                Arrays.asList("Sansa", "Stark"));
+
+        List<String> namesFlatStream = namesNested.stream()
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+
+        Assertions.assertEquals(namesFlatStream.size(), namesNested.size() * 2);
+    }
+
+    @Test
+    @DisplayName("peek() [IntermediateOperation]: performs an operation on each element of the Stream returning a new stream which can be used further")
+    public void whenIncrementSalaryUsingPeek_thenApplynewSalary() {
+        listOfEmployees.stream()
+                .peek(e -> e.salaryIncrement(10))
+                .peek(System.out::println)
+                .collect(Collectors.toList());
+
+        assertThat(listOfEmployees, contains(
+                hasProperty("salary", equalTo(165000.0)),
+                hasProperty("salary", equalTo(220000.0)),
+                hasProperty("salary", equalTo(330000.0))
+        ));
+    }
+
+    @Test
+    @DisplayName("Specialized Streams, like IntStream, provide additional operations to deal with numbers. sum(), average(), range()")
+    public void whenApplySumOnIntStream_theGetSum() {
+        Double avgSal = listOfEmployees.stream()
+                .mapToDouble(Employee::getSalary)
+                .sum();
+
+        Assertions.assertEquals(avgSal, new Double(650000));
     }
 
 }
