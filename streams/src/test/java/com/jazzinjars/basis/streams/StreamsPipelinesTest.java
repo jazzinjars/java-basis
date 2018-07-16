@@ -10,6 +10,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasProperty;
+
 public class StreamsPipelinesTest extends GenericStreamsTest {
 
 	@Test
@@ -48,6 +53,20 @@ public class StreamsPipelinesTest extends GenericStreamsTest {
 				.orElse(null);
 
 		Assertions.assertEquals(employee.getSalary(), new Double(150000));
+	}
+
+	@Test
+	@DisplayName("parallel(): perform Stream operations in parallel. Be aware of [thread-safe, order operations, parallel code execution]")
+	public void whenParallelStream_thenPerformOperationsInParallel() {
+		List<Employee> employeeList = Arrays.asList(arrayOfEmployees);
+
+		employeeList.stream().parallel().forEach(e -> e.salaryIncrement(10.0));
+
+		assertThat(listOfEmployees, contains(
+				hasProperty("salary", equalTo(165000.0)),
+				hasProperty("salary", equalTo(220000.0)),
+				hasProperty("salary", equalTo(330000.0))
+		));
 	}
 
 }

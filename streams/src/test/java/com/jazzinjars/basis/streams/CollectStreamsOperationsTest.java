@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
+import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 
 public class CollectStreamsOperationsTest extends GenericStreamsTest {
@@ -76,5 +77,52 @@ public class CollectStreamsOperationsTest extends GenericStreamsTest {
 
 		Assertions.assertEquals(isEven.get(true).size(), 4);
 		Assertions.assertEquals(isEven.get(false).size(), 1);
+	}
+
+	@Test
+	@DisplayName("groupingBy(): takes a classification function as its parameter and apply it to each element of the Stream")
+	public void whenStreamGroupingBy_thenGetMap() {
+		Map<Character, List<Employee>> groupByAlphabet = listOfEmployees.stream()
+			.collect(Collectors.groupingBy(e -> new Character(e.getName().charAt(0))));
+
+		Assertions.assertEquals(groupByAlphabet.get('A').get(0).getName(), "Arya Stark");
+		Assertions.assertEquals(groupByAlphabet.get('C').get(0).getName(), "Cersei Lannister");
+		Assertions.assertEquals(groupByAlphabet.get('J').get(0).getName(), "John Snow");
+	}
+
+	@Test
+	@DisplayName("mapping(): group data into a type other tahn the element type adapting Collector to a different type")
+	public void whenStreamMapping_thenGetMap() {
+		Map<Character, List<Integer>> idGroupedByAlphabet = listOfEmployees.stream()
+				.collect(Collectors.groupingBy(e -> new Character(e.getName().charAt(0)),
+						Collectors.mapping(Employee::getId, Collectors.toList())));
+
+		Assertions.assertEquals(idGroupedByAlphabet.get('A').get(0), new Integer(1));
+		Assertions.assertEquals(idGroupedByAlphabet.get('C').get(0), new Integer(3));
+		Assertions.assertEquals(idGroupedByAlphabet.get('J').get(0), new Integer(2));
+	}
+
+	@Test
+	@DisplayName("reducing(): returns a Collector which performs a reduction of its input elements")
+	public void whenStreamReducing_thenGetValue() {
+		Double percentage = 10.0;
+		Double salIncrOverhead = listOfEmployees.stream()
+				.collect(Collectors.reducing(0.0, e -> e.getSalary() * percentage / 100, (s1, s2) -> s1 + s2));
+
+		Assertions.assertEquals(salIncrOverhead, 65000.0, 0.1);
+	}
+
+	@Test
+	@DisplayName("reducing(): is most useful when used in a multi-level reduction, downstream of GroupingBy() or PartitioningBy()")
+	public void whenStreamGroupingAndReducing_thenGetMap() {
+		Comparator<Employee> byNameLength = Comparator.comparing(Employee::getName);
+
+		Map<Character, Optional<Employee>> longestNameByAlphabet = listOfEmployees.stream()
+				.collect(Collectors.groupingBy(e -> new Character(e.getName().charAt(0)),
+						Collectors.reducing(BinaryOperator.maxBy(byNameLength))));
+
+		Assertions.assertEquals(longestNameByAlphabet.get('A').get().getName(), "Arya Stark");
+		Assertions.assertEquals(longestNameByAlphabet.get('C').get().getName(), "Cersei Lannister");
+		Assertions.assertEquals(longestNameByAlphabet.get('J').get().getName(), "John Snow");
 	}
 }
