@@ -6,7 +6,6 @@ import static com.jayway.awaitility.Awaitility.await;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.SubmissionPublisher;
 import java.util.concurrent.TimeUnit;
 
