@@ -34,6 +34,7 @@
     <modules>
         <module>streams</module>
         <module>reactive-streams</module>
+        <module>concurrency</module>
     </modules>
 
     <build>
