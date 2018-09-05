@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-public class PersonRepositoryTest {
+public class PersonRepositoryUnitTest {
 
 	PersonRepository personRepository = new PersonRepository();
 
