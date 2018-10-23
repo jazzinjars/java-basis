@@ -13,26 +13,32 @@
     <artifactId>reactive-streams</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <properties>
+        <rxjava.version>2.2.2</rxjava.version>
+        <typesafe.akka.version>2.5.16</rxjava.version>
+        <reactor.core.version>3.2.1.RELEASE</rxjava.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>io.reactivex.rxjava2</groupId>
             <artifactId>rxjava</artifactId>
-            <version>2.1.17</version>
+            <version>${rxjava.version}</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-actor_2.12</artifactId>
-            <version>2.5.16</version>
+            <version>${typesafe.akka.version}</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-stream_2.12</artifactId>
-            <version>2.5.16</version>
+            <version>${typesafe.akka.version}</version>
         </dependency>
         <dependency>
             <groupId>io.projectreactor</groupId>
             <artifactId>reactor-core</artifactId>
-            <version>3.1.8.RELEASE</version>
+            <version>${reactor.core.version}</version>
         </dependency>
     </dependencies>
 
